@@ -815,7 +815,62 @@ export default function App() {
     );
   }
 
+  // IF AUTHENTICATED BUT LOADING: Show loading screen (handles Render cold start)
+  if (token && isLoading) {
+    return (
+      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#0b0f19] gap-6 font-sans">
+        <div className="h-16 w-16 rounded-2xl bg-gradient-to-tr from-brand-600 to-cyan-400 flex items-center justify-center font-bold text-3xl text-white shadow-lg shadow-brand-500/30 animate-pulse">
+          ⚡
+        </div>
+        <div className="text-center">
+          <p className="text-slate-200 font-bold text-base">กำลังเชื่อมต่อระบบ...</p>
+          <p className="text-slate-500 text-xs mt-2">กรุณารอสักครู่ ระบบ Backend กำลังเริ่มทำงาน</p>
+          <p className="text-slate-600 text-[10px] mt-1">(Render free tier ใช้เวลาประมาณ 30-60 วินาที)</p>
+        </div>
+        <div className="flex gap-1.5 mt-2">
+          <span className="w-2 h-2 bg-brand-500 rounded-full animate-bounce" style={{animationDelay:'0ms'}}></span>
+          <span className="w-2 h-2 bg-brand-400 rounded-full animate-bounce" style={{animationDelay:'150ms'}}></span>
+          <span className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{animationDelay:'300ms'}}></span>
+        </div>
+      </div>
+    );
+  }
+
+  // IF ERROR (backend unreachable): Show retry screen
+  if (token && error) {
+    return (
+      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#0b0f19] gap-6 font-sans px-4">
+        <div className="h-16 w-16 rounded-2xl bg-rose-500/20 border border-rose-500/30 flex items-center justify-center text-3xl">
+          ⚠️
+        </div>
+        <div className="text-center max-w-sm">
+          <p className="text-slate-200 font-bold text-base">ไม่สามารถเชื่อมต่อ Backend ได้</p>
+          <p className="text-slate-500 text-xs mt-2 leading-relaxed">
+            Render อาจยังไม่ตื่น (cold start) หรือ network มีปัญหา<br/>
+            กรุณากด Retry อีกครั้ง
+          </p>
+          <p className="text-rose-400/70 text-[10px] mt-2 font-mono">{error}</p>
+        </div>
+        <div className="flex gap-3 mt-2">
+          <button
+            onClick={() => { setError(null); setIsLoading(true); fetchData(); }}
+            className="px-6 py-2.5 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl text-sm transition-all shadow-lg shadow-brand-500/20 flex items-center gap-2"
+          >
+            <RefreshCw className="h-4 w-4" /> Retry เชื่อมต่อใหม่
+          </button>
+          <button
+            onClick={handleLogout}
+            className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-sm transition-all"
+          >
+            ออกจากระบบ
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   // IF AUTHENTICATED: Render main app workspace
+
   return (
     <div className="font-sans min-h-screen bg-[#0b0f19] text-slate-100 flex flex-col selection:bg-brand-500 selection:text-white pb-20">
       
