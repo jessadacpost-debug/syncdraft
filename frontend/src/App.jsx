@@ -38,7 +38,7 @@ import {
   Sliders
 } from 'lucide-react';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://syncdraft-1.onrender.com/api';
 
 const STATUS_FLOW = [
   'รอ Framing',
