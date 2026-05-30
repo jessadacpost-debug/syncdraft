@@ -13,7 +13,14 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET || 'syncdraft-super-secret-key-123456';
 
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: false
+}));
+app.options('*', cors());
+//app.use(cors());
 app.use(express.json());
 
 // ==================== CRYPTO & AUTH HELPERS ====================
